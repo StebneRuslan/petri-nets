@@ -11,8 +11,6 @@ import { EditorService } from '../../services/editor/editor.service';
 
 export class EditorComponent implements OnInit {
   public json: EditorModel;
-  public svg = d3.select('svg');
-  private simulation = null;
   private deadColor = '#333';
   private liveColor = '#666';
 
@@ -21,22 +19,22 @@ export class EditorComponent implements OnInit {
   public circles = null;
   public texts = null;
   constructor(private editorService: EditorService) {
-    this.json = new EditorModel();
+    this.json = this.editorService.config;
   }
 
   ngOnInit() {
     this.ticked = this.ticked.bind(this);
     this.getColor = this.getColor.bind(this);
-    this.simulation = d3.forceSimulation(this.json.nodes)
+    this.editorService.simulation = d3.forceSimulation(this.json.nodes)
       .force('charge', d3.forceManyBody().strength(-20))
       .force('center', d3.forceCenter(300, 300))
       .on('tick', this.ticked);
-    this.simulation.force('link', d3.forceLink().links(this.json.edges));
+    this.editorService.simulation.force('link', d3.forceLink().links(this.json.edges));
   }
 
   private ticked(): void {
-    this.rects = this.createSquares(this.json);
     this.links = this.createLink(this.json);
+    this.rects = this.createSquares(this.json);
     this.circles = this.createCircles(this.json);
     this.texts = this.createTitle();
     this.createText();
@@ -148,7 +146,7 @@ export class EditorComponent implements OnInit {
       .attr('class', 'link')
       .merge(links)
       .style('stroke', '#000')
-      .style('stroke-width', 2);
+      .style('stroke-width', 1);
     links.exit().remove();
     return links;
   }

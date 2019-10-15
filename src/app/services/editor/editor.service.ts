@@ -6,6 +6,9 @@ import * as d3 from 'd3';
   providedIn: 'root'
 })
 export class EditorService {
+  public svg = d3.select('svg');
+  public config = new EditorModel();
+  public simulation = null;
   constructor() { }
 
   public getNodes(config: EditorModel): any {
@@ -18,5 +21,15 @@ export class EditorService {
 
   public all(xs) {
     return xs.length && xs.reduce((a, b) => a && b, true);
+  }
+
+  public getMaxId(config: EditorModel): number {
+    let max = 0;
+    Object.values(config.nodes).map((node: any) => {
+      if (node.id > 0) {
+        max = node.id;
+      }
+    });
+    return max;
   }
 }
