@@ -11,6 +11,7 @@ export class EditorModel {
     { id: 8, name: 'z', group: 1 },
     { id: 9, name: '!', group: 1 },
     // { id: 10, name: 'w', group: 0, count: 0 }
+    // 4
   ];
   public edges: any =  [
     { source: 0, target: 9 },
